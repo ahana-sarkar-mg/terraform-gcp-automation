@@ -6,7 +6,7 @@ terraform {
       version = "~> 5.0"
     }
   }
-  
+
   backend "gcs" {
     # Bucket name will be provided via backend config in GitHub Actions
     prefix = "terraform/state"
@@ -38,12 +38,12 @@ variable "bucket_name" {
 resource "google_storage_bucket" "main" {
   name     = var.bucket_name
   location = var.region
-  
+
   # Enable versioning
   versioning {
     enabled = true
   }
-  
+
   # Lifecycle rule to delete objects after 30 days
   lifecycle_rule {
     action {
@@ -53,7 +53,7 @@ resource "google_storage_bucket" "main" {
       age = 30
     }
   }
-  
+
   # Uniform bucket-level access
   uniform_bucket_level_access = true
 }
