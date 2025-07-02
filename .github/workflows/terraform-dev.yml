@@ -11,6 +11,10 @@ on:
       - 'terraform/environments/dev/**'
       - 'terraform/modules/**'
 
+permissions:
+  contents: read
+  id-token: write
+
 jobs:
   terraform-dev:
     uses: ./.github/workflows/terraform-template.yml
