@@ -1,0 +1,74 @@
+name: 'Terraform Template'
+
+on:
+  workflow_call:
+    inputs:
+      environment:
+        required: true
+        type: string
+        description: 'Environment name (dev/prod)'
+      working_directory:
+        required: true
+        type: string
+        description: 'Terraform working directory'
+      target_branch:
+        required: true
+        type: string
+        description: 'Target branch for deployment'
+    secrets:
+      WIF_PROVIDER:
+        required: true
+      WIF_SERVICE_ACCOUNT:
+        required: true
+
+env:
+  TF_VERSION: '1.6.0'
+
+jobs:
+  terraform:
+    name: 'Terraform ${{ inputs.environment }}'
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
+
+    defaults:
+      run:
+        working-directory: ${{ inputs.working_directory }}
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Authenticate to Google Cloud
+      uses: google-github-actions/auth@v2
+      with:
+        workload_identity_provider: ${{ secrets.WIF_PROVIDER }}
+        service_account: ${{ secrets.WIF_SERVICE_ACCOUNT }}
+
+    - name: Set up Cloud SDK
+      uses: google-github-actions/setup-gcloud@v2
+
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v3
+      with:
+        terraform_version: ${{ env.TF_VERSION }}
+
+    - name: Terraform Format Check
+      run: terraform fmt
+
+    - name: Terraform Init
+      run: terraform init
+
+    - name: Terraform Validate
+      run: terraform validate
+
+    - name: Terraform Plan
+      if: github.event_name == 'push'
+      run: terraform plan -out=tfplan
+
+    - name: Terraform Apply
+      if: github.ref == format('refs/heads/{0}', inputs.target_branch) && github.event_name == 'push'
+      run: terraform apply -auto-approve tfplan
+
+    - name: Show Outputs
+      if: github.ref == format('refs/heads/{0}', inputs.target_branch) && github.event_name == 'push'
+      run: terraform output
