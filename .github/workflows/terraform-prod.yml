@@ -1,0 +1,26 @@
+name: 'Deploy Terraform - Production'
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'terraform/environments/prod/**'
+      - 'terraform/modules/**'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'terraform/environments/prod/**'
+      - 'terraform/modules/**'
+
+jobs:
+  terraform-prod:
+    uses: ./.github/workflows/terraform-template.yml
+    with:
+      environment: production
+      working_directory: ./terraform/environments/prod
+      target_branch: main
+    secrets:
+      WIF_PROVIDER: ${{ secrets.PROD_WIF_PROVIDER }}
+      WIF_SERVICE_ACCOUNT: ${{ secrets.PROD_WIF_SERVICE_ACCOUNT }}
