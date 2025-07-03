@@ -4,6 +4,9 @@ on:
   push:
     branches:
       - dev
+    paths:
+      - 'terraform/environments/dev/**'
+      - 'terraform/modules/**'
   pull_request:
     branches:
       - dev
