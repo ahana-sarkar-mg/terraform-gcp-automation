@@ -1,7 +1,7 @@
 terraform {
   backend "gcs" {
-    bucket = "im-dataplatform-storage-state"
-    prefix = "envs/dev"
+    bucket = "terraform-gcp-automation-bucket-state-prod"
+    prefix = "envs/prod"
   }
   required_providers {
     google = {
