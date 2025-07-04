@@ -1,6 +1,6 @@
 terraform {
   backend "gcs" {
-    bucket = "iterraform-gcp-automation-bucket-state"
+    bucket = "terraform-gcp-automation-bucket-state"
     prefix = "envs/dev"
   }
   required_providers {
