@@ -20,7 +20,7 @@ variable "service_account_roles" {
     "roles/bigquery.dataEditor",
     "roles/composer.environmentAndStorageObjectUser",
     "roles/logging.logWriter",
-    "roles/monitoring.metricWriter,
+    "roles/monitoring.metricWriter",
     "roles/composer.worker"
   ]
 }
