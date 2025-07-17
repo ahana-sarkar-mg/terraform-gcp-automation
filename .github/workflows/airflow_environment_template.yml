@@ -20,8 +20,8 @@ jobs:
 
     env:
       COMPOSER_BUCKET: ${{ vars.COMPOSER_BUCKET }}
-      WORKLOAD_IDENTITY_PROVIDER: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
-      SERVICE_ACCOUNT: ${{ secrets.SERVICE_ACCOUNT }} 
+      WORKLOAD_IDENTITY_PROVIDER: ${{ inputs.environment == 'development' && secrets.DEV_WIF_PROVIDER || secrets.PROD_WIF_PROVIDER }}
+      SERVICE_ACCOUNT: ${{ inputs.environment == 'development' && secrets.DEV_WIF_SERVICE_ACCOUNT || secrets.PROD_WIF_SERVICE_ACCOUNT }} 
     
     steps: 
       - name: Check deployment branch
