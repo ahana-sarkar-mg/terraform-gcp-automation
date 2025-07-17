@@ -1,0 +1,11 @@
+version: 2
+
+sources:
+  - name: account_data
+    description: "Source data for IM Data Test models"
+    database: im-data-platform-dev-464620
+    schema: account
+    tables:
+      - name: accounts
+        description: "Table containing account data"
+        identifier: accounts
