@@ -1,0 +1,17 @@
+im_data_pipeline:
+  outputs:
+    prod:
+      dataset: im_dataplatform_dataset_prod
+      job_execution_timeout_seconds: 300
+      job_retries: 1
+      location: US
+      method: oauth
+      project: im-data-platform-prod
+      impersonate_service_account: im-dataplatform-sa-prod@im-data-platform-prod.iam.gserviceaccount.com
+      threads: 1
+      type: bigquery
+  target: prod
+
+
+
+
