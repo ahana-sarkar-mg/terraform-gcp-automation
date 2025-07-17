@@ -16,19 +16,25 @@ jobs:
   deploy-dev:
     name: Deploy to Dev Environment
     if: github.ref == 'refs/heads/dev'
-    uses: ./.github/workflows/airflow_environment_template.yml # Calling the reusable workflow
+    uses: ./.github/workflows/airflow_environment_template.yaml # Calling the reusable workflow
     permissions:  
       contents: 'read'
       id-token: 'write'
     with:
       environment: development
+    secrets:
+      WIF_PROVIDER: ${{ secrets.DEV_WIF_PROVIDER }}
+      WIF_SERVICE_ACCOUNT: ${{ secrets.DEV_WIF_SERVICE_ACCOUNT }}
 
   deploy-prod:
     name: Deploy to Production Environment
     if: github.ref == 'refs/heads/main'
-    uses: ./.github/workflows/airflow_environment_template.yml # Calling the reusable workflow
+    uses: ./.github/workflows/airflow_environment_template.yaml # Calling the reusable workflow
     permissions:  
       contents: 'read'
       id-token: 'write'
     with:
       environment: production
+    secrets:
+      WIF_PROVIDER: ${{ secrets.PROD_WIF_PROVIDER }}
+      WIF_SERVICE_ACCOUNT: ${{ secrets.PROD_WIF_SERVICE_ACCOUNT }}
