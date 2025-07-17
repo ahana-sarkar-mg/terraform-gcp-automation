@@ -6,6 +6,7 @@ Try running the following commands:
 - dbt debug
 - dbt run
 - dbt test
+- dbt docs
 
 
 ### Resources:
