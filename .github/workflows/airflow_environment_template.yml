@@ -52,40 +52,19 @@ jobs:
 
       - name: Sync DBT Data Pipeline to Cloud Composer GCS Bucket
         run: |
-          # Check if there are changes in im_data_pipeline folder
-          if git diff --name-only HEAD~1 HEAD | grep -q "^im_data_pipeline/"; then
-            echo "Changes detected in im_data_pipeline folder, proceeding with sync..."
-            
-            if [ -d "im_data_pipeline" ]; then
-              echo "Syncing im_data_pipeline folder to Cloud Composer data directory..."
-              LOCAL_DBT_FILES=$(find im_data_pipeline -type f \
-                ! -name ".gitkeep" \
-                ! -name ".gitignore" \
-                ! -name ".git*" \
-                ! -name "*.tmp" \
-                ! -name "*.log" \
-                ! -name ".DS_Store" \
-                | sort)
-              echo -e "DBT files to sync (excluding git/temp files) \n$LOCAL_DBT_FILES"
-              
-              # List existing files in GCS data directory (if any)
-              GCS_DATA_FILES=$(gcloud storage ls "${{ env.COMPOSER_BUCKET }}/data/" --recursive | grep -v "/$" | sort || true)
-              echo -e "Existing files in Cloud Storage data directory \n$GCS_DATA_FILES"
-              
-              # Sync the im_data_pipeline folder to the data directory in GCS with exclusions
-              gcloud storage rsync --recursive --checksums-only \
-                --exclude=".gitkeep" \
-                --exclude=".gitignore" \
-                --exclude=".git*" \
-                --exclude="*.tmp" \
-                --exclude="*.log" \
-                --exclude=".DS_Store" \
-                im_data_pipeline/ ${{ env.COMPOSER_BUCKET }}/data/im_data_pipeline --verbosity info
-              
-              echo "Successfully synced im_data_pipeline to ${{ env.COMPOSER_BUCKET }}/data (excluding git/temp files)"
-            else
-              echo "im_data_pipeline folder not found, skipping data pipeline sync"
-            fi
+          if [ -d "im_data_pipeline" ]; then
+            echo "Syncing im_data_pipeline folder to Cloud Composer GCS bucket..."
+
+            gcloud storage rsync --recursive --checksums-only \
+              --exclude=".gitkeep" \
+              --exclude=".gitignore" \
+              --exclude=".git*" \
+              --exclude="*.tmp" \
+              --exclude="*.log" \
+              --exclude=".DS_Store" \
+              im_data_pipeline/ "${{ env.COMPOSER_BUCKET }}/data/im_data_pipeline" --verbosity info
+
+            echo "Successfully synced im_data_pipeline to ${{ env.COMPOSER_BUCKET }}/data (excluding git/temp files)"
           else
-            echo "No changes detected in im_data_pipeline folder, skipping data pipeline sync"
+            echo "im_data_pipeline folder not found, skipping data pipeline sync"
           fi

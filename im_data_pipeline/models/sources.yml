@@ -1,9 +1,9 @@
 version: 2
 
 sources:
-  - name: account_data
+  - name: im_data_pipeline
     description: "Source data for IM Data Test models"
-    database: im-data-platform-dev-464620
+    database: im-data-platform-prod
     schema: account
     tables:
       - name: accounts
