@@ -16,7 +16,7 @@ jobs:
   deploy-dev:
     name: Deploy to Dev Environment
     if: github.ref == 'refs/heads/dev'
-    uses: ./.github/workflows/airflow_environment_template.yaml # Calling the reusable workflow
+    uses: ./.github/workflows/airflow_environment_template.yml # Calling the reusable workflow
     permissions:  
       contents: 'read'
       id-token: 'write'
@@ -29,7 +29,7 @@ jobs:
   deploy-prod:
     name: Deploy to Production Environment
     if: github.ref == 'refs/heads/main'
-    uses: ./.github/workflows/airflow_environment_template.yaml # Calling the reusable workflow
+    uses: ./.github/workflows/airflow_environment_template.yml # Calling the reusable workflow
     permissions:  
       contents: 'read'
       id-token: 'write'
